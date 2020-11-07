@@ -50,6 +50,15 @@ int sc_main(int arg_num, char *arg_vet[])
     cout << endl;
 
     configure(arg_num, arg_vet);
+    
+    cout << "\n\n" << "Routing Information" << endl;
+    cout << "-----------------------" << endl;
+    cout << "Routing Algorithm: "<< GlobalParams::routing_algorithm << endl;
+    cout << "Selection Algorithm: "<<GlobalParams::selection_strategy << endl;
+    cout << "Traffic Type: "<<GlobalParams::traffic_distribution << endl;
+    cout << "\n\n";
+
+
 
 
     // Signals
