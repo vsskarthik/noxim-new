@@ -38,7 +38,7 @@ int sc_main(int arg_num, char *arg_vet[])
 
     // TEMP
     drained_volume = 0;
-
+    /*
     // Handle command-line arguments
     cout << "\t--------------------------------------------" << endl; 
     cout << "\t\tNoxim - the NoC Simulator" << endl;
@@ -48,7 +48,7 @@ int sc_main(int arg_num, char *arg_vet[])
     cout << "Catania V., Mineo A., Monteleone S., Palesi M., and Patti D. (2016) Cycle-Accurate Network on Chip Simulation with Noxim. ACM Trans. Model. Comput. Simul. 27, 1, Article 4 (August 2016), 25 pages. DOI: https://doi.org/10.1145/2953878" << endl;
     cout << endl;
     cout << endl;
-
+    */
     configure(arg_num, arg_vet);
     
     cout << "\n\n" << "Routing Information" << endl;

@@ -1,0 +1,26 @@
+Loading configuration from file "../config_examples/my_config.yaml"... Done
+Loading power configurations from file "power.yaml"... Done
+
+
+Routing Information
+-----------------------
+Routing Algorithm: ODD_EVEN
+Selection Algorithm: RANDOM
+Traffic Type: TRAFFIC_RANDOM
+
+
+Reset for 1000 cycles...  done! 
+ Now running for 10000 cycles...
+Noxim simulation completed. (11000 cycles executed)
+
+% Total received packets: 1418
+% Total received flits: 11354
+% Received/Ideal flits Ratio: 0.98559
+% Average wireless utilization: 0
+% Global average delay (cycles): 11.4464
+% Max delay (cycles): 84
+% Network throughput (flits/cycle): 1.26156
+% Average IP throughput (flits/cycle/IP): 0.0788472
+% Total energy (J): 2.12223e-06
+% 	Dynamic energy (J): 1.4506e-07
+% 	Static energy (J): 1.97717e-06
