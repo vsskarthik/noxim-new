@@ -2,3 +2,4 @@ bin/*
 !bin/test_results/
 !bin/parser.py
 !bin/my_configs
+!bin/csv_files
