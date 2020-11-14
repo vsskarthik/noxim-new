@@ -1,6 +1,6 @@
 import sys
 import os
-
+import time
 
 def yaml_handler(yaml_file,key,value):
     f = open(yaml_file,'r')
@@ -10,8 +10,6 @@ def yaml_handler(yaml_file,key,value):
             lines[i] = lines[i].split(':')[0]+": "+str(value)+"\n"
     with open('temp.yaml','w') as of:
         of.writelines(lines)
-
-#[TODO] Add Log Function
 
 
 def run_sim(yaml_file,rate,routing_algo,selection_algo):
@@ -36,10 +34,13 @@ if __name__ == '__main__':
     injection_rates = [0.01,0.02,0.1]
     routing_algo = 'ODD_EVEN'
     selection_algo = 'RANDOM'
+    csv_path = f'csv_files/{routing_algo}_{selection_algo}_{int(time.time())}.csv'
+    csv_file = open(csv_path,'w')
     print(f'{routing_algo} | {selection_algo}')
     for i in injection_rates:
         run_sim(config_file,i,routing_algo,selection_algo)
         latency = parse('./test_results/temp_res')
+        csv_file.write(f'{i},{latency}\n')    
         print(f'{i} : {latency}')
-
+    csv_file.close()
 
