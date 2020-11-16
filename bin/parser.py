@@ -12,10 +12,11 @@ def yaml_handler(yaml_file,key,value):
         of.writelines(lines)
 
 
-def run_sim(yaml_file,rate,routing_algo,selection_algo):
+def run_sim(yaml_file,rate,routing_algo,selection_algo,traffic_pattern):
     yaml_handler(yaml_file,'packet_injection_rate',rate)
     yaml_handler('temp.yaml','routing_algorithm',routing_algo)
     yaml_handler('temp.yaml','selection_strategy',selection_algo)
+    yaml_handler('temp.yaml','traffic_distribution','TRAFFIC_'+traffic_pattern)
     os.system(f'./noxim -config ./temp.yaml > ./test_results/temp_res')
     
     
@@ -31,16 +32,19 @@ def parse(filename):
 
 if __name__ == '__main__':
     config_file = '../config_examples/my_config.yaml'
-    injection_rates = [0.01,0.02,0.1]
+    injection_rates = [0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5]
     routing_algo = 'ODD_EVEN'
     selection_algo = 'RANDOM'
-    csv_path = f'csv_files/{routing_algo}_{selection_algo}_{int(time.time())}.csv'
+    traffic_pattern = 'TRANSPOSE1'
+    csv_path = f'csv_files/{routing_algo}_{selection_algo}_{traffic_pattern}_{int(time.time())}.csv'
     csv_file = open(csv_path,'w')
-    print(f'{routing_algo} | {selection_algo}')
+    print(f'Routing Algo: {routing_algo} | Selection: {selection_algo} | Traffic: {traffic_pattern}')
+    c=1
     for i in injection_rates:
-        run_sim(config_file,i,routing_algo,selection_algo)
+        run_sim(config_file,i,routing_algo,selection_algo,traffic_pattern)
         latency = parse('./test_results/temp_res')
         csv_file.write(f'{i},{latency}\n')    
-        print(f'{i} : {latency}')
+        print(f'{c}/{len(injection_rates)} => {i} : {latency}')
+        c+=1
     csv_file.close()
 
