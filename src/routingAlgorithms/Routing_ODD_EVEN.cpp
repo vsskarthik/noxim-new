@@ -7,7 +7,7 @@ Routing_ODD_EVEN * Routing_ODD_EVEN::routing_ODD_EVEN = 0;
 Routing_ODD_EVEN * Routing_ODD_EVEN::getInstance() {
 	if ( routing_ODD_EVEN == 0 )
 		routing_ODD_EVEN = new Routing_ODD_EVEN();
-    
+
 	return routing_ODD_EVEN;
 }
 
@@ -17,7 +17,6 @@ vector<int> Routing_ODD_EVEN::route(Router * router, const RouteData & routeData
     Coord destination = id2Coord(routeData.dst_id);
     Coord source = id2Coord(routeData.src_id);
     vector <int> directions;
-
     int c0 = current.x;
     int c1 = current.y;
     int s0 = source.x;
@@ -59,6 +58,5 @@ vector<int> Routing_ODD_EVEN::route(Router * router, const RouteData & routeData
     }
 
     assert(directions.size() > 0 && directions.size() <= 2);
-
     return directions;
 }

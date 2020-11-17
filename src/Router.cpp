@@ -34,9 +34,9 @@ void Router::rxProcess()
 	}
 	routed_flits = 0;
 	local_drained = 0;
-    } 
-    else 
-    { 
+    }
+    else
+    {
 	// This process simply sees a flow of incoming flits. All arbitration
 	// and wormhole related issues are addressed in the txProcess()
 	//assert(false);
@@ -47,13 +47,13 @@ void Router::rxProcess()
 	    //LOG<<"****RX****DIRECTION ="<<i<<  endl;
 
 	    if (req_rx[i].read() == 1 - current_level_rx[i])
-	    { 
+	    {
 		Flit received_flit = flit_rx[i].read();
 		//LOG<<"request opposite to the current_level, reading flit "<<received_flit<<endl;
 
 		int vc = received_flit.vc_id;
 
-		if (!buffer[i][vc].IsFull()) 
+		if (!buffer[i][vc].IsFull())
 		{
 
 		    // Store the incoming flit in the circular buffer
@@ -73,8 +73,8 @@ void Router::rxProcess()
 
 		else  // buffer full
 		{
-		    // should not happen with the new TBufferFullStatus control signals    
-		    // except for flit coming from local PE, which don't use it 
+		    // should not happen with the new TBufferFullStatus control signals
+		    // except for flit coming from local PE, which don't use it
 		    LOG << " Flit " << received_flit << " buffer full Input[" << i << "][" << vc <<"]" << endl;
 		    assert(i== DIRECTION_LOCAL);
 		}
@@ -93,36 +93,36 @@ void Router::rxProcess()
 void Router::txProcess()
 {
 
-  if (reset.read()) 
+  if (reset.read())
     {
       // Clear outputs and indexes of transmitting protocol
-      for (int i = 0; i < DIRECTIONS + 2; i++) 
+      for (int i = 0; i < DIRECTIONS + 2; i++)
 	{
 	  req_tx[i].write(0);
 	  current_level_tx[i] = 0;
 	}
-    } 
-  else 
-    { 
+    }
+  else
+    {
       // 1st phase: Reservation
-      for (int j = 0; j < DIRECTIONS + 2; j++) 
+      for (int j = 0; j < DIRECTIONS + 2; j++)
 	{
 	  int i = (start_from_port + j) % (DIRECTIONS + 2);
 
 	  for (int k = 0;k < GlobalParams::n_virtual_channels; k++)
 	  {
 	      int vc = (start_from_vc[i]+k)%(GlobalParams::n_virtual_channels);
-	      
-	      // Uncomment to enable deadlock checking on buffers. 
+
+	      // Uncomment to enable deadlock checking on buffers.
 	      // Please also set the appropriate threshold.
 	      // buffer[i].deadlockCheck();
 
-	      if (!buffer[i][vc].IsEmpty()) 
+	      if (!buffer[i][vc].IsEmpty())
 	      {
 		  Flit flit = buffer[i][vc].Front();
 		  power.bufferRouterFront();
 
-		  if (flit.flit_type == FLIT_TYPE_HEAD) 
+		  if (flit.flit_type == FLIT_TYPE_HEAD)
 		    {
 		      // prepare data for routing
 		      RouteData route_data;
@@ -153,7 +153,7 @@ void Router::txProcess()
 
 		      int rt_status = reservation_table.checkReservation(r,o);
 
-		      if (rt_status == RT_AVAILABLE) 
+		      if (rt_status == RT_AVAILABLE)
 		      {
 			  LOG << " reserving direction " << o << " for flit " << flit << endl;
 			  reservation_table.reserve(r, o);
@@ -181,10 +181,10 @@ void Router::txProcess()
 
       // 2nd phase: Forwarding
       //if (local_id==6) LOG<<"*TX*****local_id="<<local_id<<"__ack_tx[0]= "<<ack_tx[0].read()<<endl;
-      for (int i = 0; i < DIRECTIONS + 2; i++) 
-      { 
+      for (int i = 0; i < DIRECTIONS + 2; i++)
+      {
 	  vector<pair<int,int> > reservations = reservation_table.getReservations(i);
-	  
+
 	  if (reservations.size()!=0)
 	  {
 
@@ -194,17 +194,17 @@ void Router::txProcess()
 	      int vc = reservations[rnd_idx].second;
 	     // LOG<< "found reservation from input= " << i << "_to output= "<<o<<endl;
 	      // can happen
-	      if (!buffer[i][vc].IsEmpty())  
+	      if (!buffer[i][vc].IsEmpty())
 	      {
 		  // power contribution already computed in 1st phase
 		  Flit flit = buffer[i][vc].Front();
 		  //LOG<< "*****TX***Direction= "<<i<< "************"<<endl;
 		  //LOG<<"_cl_tx="<<current_level_tx[o]<<"req_tx="<<req_tx[o].read()<<" _ack= "<<ack_tx[o].read()<< endl;
-		  
+
 		  if ( (current_level_tx[o] == ack_tx[o].read()) &&
-		       (buffer_full_status_tx[o].read().mask[vc] == false) ) 
+		       (buffer_full_status_tx[o].read().mask[vc] == false) )
 		  {
-		      //if (GlobalParams::verbose_mode > VERBOSE_OFF) 
+		      //if (GlobalParams::verbose_mode > VERBOSE_OFF)
 		      LOG << "Input[" << i << "][" << vc << "] forwarded to Output[" << o << "], flit: " << flit << endl;
 
 		      flit_tx[o].write(flit);
@@ -228,22 +228,22 @@ void Router::txProcess()
 		      power.bufferRouterPop();
 		      power.crossBar();
 
-		      if (o == DIRECTION_LOCAL) 
+		      if (o == DIRECTION_LOCAL)
 		      {
 			  power.networkInterface();
 			  LOG << "Consumed flit " << flit << endl;
 			  stats.receivedFlit(sc_time_stamp().to_double() / GlobalParams::clock_period_ps, flit);
-			  if (GlobalParams:: max_volume_to_be_drained) 
+			  if (GlobalParams:: max_volume_to_be_drained)
 			  {
 			      if (drained_volume >= GlobalParams:: max_volume_to_be_drained)
 				  sc_stop();
-			      else 
+			      else
 			      {
 				  drained_volume++;
 				  local_drained++;
 			      }
 			  }
-		      } 
+		      }
 		      else if (i != DIRECTION_LOCAL) // not generated locally
 			  routed_flits++;
 		      /* End Power & Stats ------------------------------------------------- */
@@ -262,13 +262,13 @@ void Router::txProcess()
 			  */
 		  }
 	      }
-	  } // if not reserved 
+	  } // if not reserved
 	 // else LOG<<"we have no reservation for direction "<<i<< endl;
       } // for loop directions
 
       if ((int)(sc_time_stamp().to_double() / GlobalParams::clock_period_ps)%2==0)
 	  reservation_table.updateIndex();
-    }   
+    }
 }
 
 NoP_data Router::getCurrentNoPData()
@@ -333,13 +333,13 @@ vector<int> Router::nextDeltaHops(RouteData rd) {
 	int stg = log2(GlobalParams::n_delta_tiles);
 	int c;
 	//---From Source to stage 0 (return the sw attached to the source)---
-	//Topology omega 
-	if (GlobalParams::topology == TOPOLOGY_OMEGA) 	
+	//Topology omega
+	if (GlobalParams::topology == TOPOLOGY_OMEGA)
 	{
-	if(current_node < (GlobalParams::n_delta_tiles/2))	
+	if(current_node < (GlobalParams::n_delta_tiles/2))
 		 c = current_node;
-	else if(current_node >= (GlobalParams::n_delta_tiles/2))	
-		 c = (current_node - (GlobalParams::n_delta_tiles/2));		
+	else if(current_node >= (GlobalParams::n_delta_tiles/2))
+		 c = (current_node - (GlobalParams::n_delta_tiles/2));
 	}
 	//Other delta topologies: Butterfly and baseline
 	else if ((GlobalParams::topology == TOPOLOGY_BUTTERFLY)||(GlobalParams::topology == TOPOLOGY_BASELINE))
@@ -354,8 +354,8 @@ vector<int> Router::nextDeltaHops(RouteData rd) {
 
 		next_hops.push_back(N);
 		current_node = N;
-	
-	
+
+
    //---From stage 0 to Destination---
 	int current_stage = 0;
 
@@ -521,7 +521,7 @@ void Router::configure(const int _id,
     stats.configure(_id, _warm_up_time);
 
     start_from_port = DIRECTION_LOCAL;
-  
+
 
     if (grt.isValid())
 	routing_table.configure(grt, _id);
@@ -585,7 +585,7 @@ int Router::getNeighborId(int _id, int direction) const
 {
     assert(GlobalParams::topology == TOPOLOGY_MESH);
 
-    Coord my_coord = id2Coord(_id); 
+    Coord my_coord = id2Coord(_id);
 
     switch (direction) {
     case DIRECTION_NORTH:
@@ -616,6 +616,11 @@ int Router::getNeighborId(int _id, int direction) const
     int neighbor_id = coord2Id(my_coord);
 
     return neighbor_id;
+}
+
+int Router::CI(int direction){
+	if (free_slots_neighbor[direction]==NOT_VALID) return NULL;
+	return GlobalParams::buffer_depth - free_slots_neighbor[direction];
 }
 
 bool Router::inCongestion()

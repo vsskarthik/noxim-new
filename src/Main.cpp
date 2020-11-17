@@ -34,28 +34,29 @@ void signalHandler( int signum )
 
 int sc_main(int arg_num, char *arg_vet[])
 {
-    signal(SIGQUIT, signalHandler);  
+    signal(SIGQUIT, signalHandler);
 
     // TEMP
     drained_volume = 0;
     /*
     // Handle command-line arguments
-    cout << "\t--------------------------------------------" << endl; 
+    cout << "\t--------------------------------------------" << endl;
     cout << "\t\tNoxim - the NoC Simulator" << endl;
     cout << "\t\t(C) University of Catania" << endl;
-    cout << "\t--------------------------------------------" << endl; 
+    cout << "\t--------------------------------------------" << endl;
 
     cout << "Catania V., Mineo A., Monteleone S., Palesi M., and Patti D. (2016) Cycle-Accurate Network on Chip Simulation with Noxim. ACM Trans. Model. Comput. Simul. 27, 1, Article 4 (August 2016), 25 pages. DOI: https://doi.org/10.1145/2953878" << endl;
     cout << endl;
     cout << endl;
     */
     configure(arg_num, arg_vet);
-    
+
     cout << "\n\n" << "Routing Information" << endl;
     cout << "-----------------------" << endl;
     cout << "Routing Algorithm: "<< GlobalParams::routing_algorithm << endl;
     cout << "Selection Algorithm: "<<GlobalParams::selection_strategy << endl;
     cout << "Traffic Type: "<<GlobalParams::traffic_distribution << endl;
+    cout << "Injection Rate: "<<GlobalParams::packet_injection_rate << endl;
     cout << "\n\n";
 
 

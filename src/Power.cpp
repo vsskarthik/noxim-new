@@ -26,7 +26,7 @@ Power::Power()
     buffer_router_pop_pwr_d = 0.0;
     buffer_router_front_pwr_d = 0.0;
     buffer_router_pwr_s = 0.0;
-    
+
     buffer_to_tile_push_pwr_d = 0.0;
     buffer_to_tile_pop_pwr_d = 0.0;
     buffer_to_tile_front_pwr_d = 0.0;
@@ -82,14 +82,14 @@ void Power::configureRouter(int link_width,
 {
 // (s)tatic, (d)ynamic power
 
-    // Buffer 
+    // Buffer
     pair<int,int> key = pair<int,int>(buffer_depth, buffer_item_size);
-    
+/*
     assert(GlobalParams::power_configuration.bufferPowerConfig.leakage.find(key) != GlobalParams::power_configuration.bufferPowerConfig.leakage.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.push.find(key) != GlobalParams::power_configuration.bufferPowerConfig.push.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.front.find(key) != GlobalParams::power_configuration.bufferPowerConfig.front.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.pop.find(key) != GlobalParams::power_configuration.bufferPowerConfig.pop.end());
-
+*/
     // Dynamic values are expressed in Joule
     // Static/Leakage values must be converted from Watt to Joule
 
@@ -98,13 +98,13 @@ void Power::configureRouter(int link_width,
     buffer_router_front_pwr_d = GlobalParams::power_configuration.bufferPowerConfig.front[key];
     buffer_router_pop_pwr_d = GlobalParams::power_configuration.bufferPowerConfig.pop[key];
 
-    // Routing 
+    // Routing
     assert(GlobalParams::power_configuration.routerPowerConfig.routing_algorithm_pm.find(routing_function) != GlobalParams::power_configuration.routerPowerConfig.routing_algorithm_pm.end());
 
     routing_pwr_s = W2J(GlobalParams::power_configuration.routerPowerConfig.routing_algorithm_pm[routing_function].first);
     routing_pwr_d = GlobalParams::power_configuration.routerPowerConfig.routing_algorithm_pm[routing_function].second;
 
-    // Selection 
+    // Selection
     assert(GlobalParams::power_configuration.routerPowerConfig.selection_strategy_pm.find(selection_function) != GlobalParams::power_configuration.routerPowerConfig.selection_strategy_pm.end());
 
     selection_pwr_s = W2J(GlobalParams::power_configuration.routerPowerConfig.selection_strategy_pm[selection_function].first);
@@ -116,16 +116,16 @@ void Power::configureRouter(int link_width,
     assert(GlobalParams::power_configuration.routerPowerConfig.crossbar_pm.find(xbar_k) != GlobalParams::power_configuration.routerPowerConfig.crossbar_pm.end());
     crossbar_pwr_s = W2J(GlobalParams::power_configuration.routerPowerConfig.crossbar_pm[xbar_k].first);
     crossbar_pwr_d = GlobalParams::power_configuration.routerPowerConfig.crossbar_pm[xbar_k].second;
-    
+
     // NetworkInterface
     ni_pwr_s = W2J(GlobalParams::power_configuration.routerPowerConfig.network_interface[GlobalParams::flit_size].first);
     ni_pwr_d = GlobalParams::power_configuration.routerPowerConfig.network_interface[GlobalParams::flit_size].second;
 
-    // Link 
+    // Link
     // Router has both type of links
     double length_r2h = GlobalParams::r2h_link_length;
     double length_r2r = GlobalParams::r2r_link_length;
-    
+
     assert(GlobalParams::power_configuration.linkBitLinePowerConfig.find(length_r2r)!=GlobalParams::power_configuration.linkBitLinePowerConfig.end());
     assert(GlobalParams::power_configuration.linkBitLinePowerConfig.find(length_r2h)!=GlobalParams::power_configuration.linkBitLinePowerConfig.end());
 
@@ -147,10 +147,10 @@ void Power::configureHub(int link_width,
 {
 // (s)tatic, (d)ynamic power
 
-    // Buffer 
+    // Buffer
     pair<int,int> key_to_tile = pair<int,int>(buffer_to_tile_depth, buffer_item_size);
     pair<int,int> key_from_tile = pair<int,int>(buffer_from_tile_depth, buffer_item_size);
-    
+
     assert(GlobalParams::power_configuration.bufferPowerConfig.leakage.find(key_to_tile) != GlobalParams::power_configuration.bufferPowerConfig.leakage.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.push.find(key_to_tile) != GlobalParams::power_configuration.bufferPowerConfig.push.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.front.find(key_to_tile) != GlobalParams::power_configuration.bufferPowerConfig.front.end());
@@ -170,10 +170,10 @@ void Power::configureHub(int link_width,
     buffer_from_tile_push_pwr_d = GlobalParams::power_configuration.bufferPowerConfig.push[key_from_tile];
     buffer_from_tile_front_pwr_d = GlobalParams::power_configuration.bufferPowerConfig.front[key_from_tile];
     buffer_from_tile_pop_pwr_d = GlobalParams::power_configuration.bufferPowerConfig.pop[key_from_tile];
-   
+
     // Buffer Antenna RX
     pair<int,int> akey = pair<int,int>(antenna_buffer_rx_depth,antenna_buffer_item_size);
-    
+
     assert(GlobalParams::power_configuration.bufferPowerConfig.leakage.find(akey) != GlobalParams::power_configuration.bufferPowerConfig.leakage.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.push.find(akey) != GlobalParams::power_configuration.bufferPowerConfig.push.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.front.find(akey) != GlobalParams::power_configuration.bufferPowerConfig.front.end());
@@ -186,20 +186,20 @@ void Power::configureHub(int link_width,
 
     // Buffer Antenna TX
     akey = pair<int,int>(antenna_buffer_tx_depth,antenna_buffer_item_size);
-    
+
     assert(GlobalParams::power_configuration.bufferPowerConfig.leakage.find(akey) != GlobalParams::power_configuration.bufferPowerConfig.leakage.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.push.find(akey) != GlobalParams::power_configuration.bufferPowerConfig.push.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.front.find(akey) != GlobalParams::power_configuration.bufferPowerConfig.front.end());
     assert(GlobalParams::power_configuration.bufferPowerConfig.pop.find(akey) != GlobalParams::power_configuration.bufferPowerConfig.pop.end());
 
-    // TODO: currently both RX/RX values are aggregated and then an average is returned 
+    // TODO: currently both RX/RX values are aggregated and then an average is returned
     antenna_buffer_pwr_s += W2J(GlobalParams::power_configuration.bufferPowerConfig.leakage[akey]);
     antenna_buffer_push_pwr_d += GlobalParams::power_configuration.bufferPowerConfig.push[akey];
     antenna_buffer_front_pwr_d += GlobalParams::power_configuration.bufferPowerConfig.front[akey];
     antenna_buffer_pop_pwr_d += GlobalParams::power_configuration.bufferPowerConfig.pop[akey];
 
     antenna_buffer_pwr_s = antenna_buffer_pwr_s/2;
-    antenna_buffer_push_pwr_d = antenna_buffer_push_pwr_d/2; 
+    antenna_buffer_push_pwr_d = antenna_buffer_push_pwr_d/2;
     antenna_buffer_front_pwr_d = antenna_buffer_front_pwr_d/2;
     antenna_buffer_pop_pwr_d = antenna_buffer_pop_pwr_d/2;
 
@@ -212,7 +212,7 @@ void Power::configureHub(int link_width,
 
     // RX Dynamic
     wireless_rx_pwr = antenna_buffer_item_size * GlobalParams::power_configuration.hubPowerConfig.rx_dynamic;
-    
+
     // RX snooping
     wireless_snooping = GlobalParams::power_configuration.hubPowerConfig.rx_snooping;
 
@@ -220,12 +220,12 @@ void Power::configureHub(int link_width,
     transceiver_rx_pwr_s = W2J(GlobalParams::power_configuration.hubPowerConfig.transceiver_leakage.first);
     // TX leakage
     transceiver_tx_pwr_s = W2J(GlobalParams::power_configuration.hubPowerConfig.transceiver_leakage.second);
-   
+
     // RX biasing
     transceiver_rx_pwr_biasing = W2J(GlobalParams::power_configuration.hubPowerConfig.transceiver_biasing.first);
     // TX biasing
     transceiver_tx_pwr_biasing = W2J(GlobalParams::power_configuration.hubPowerConfig.transceiver_biasing.second);
-    // Link 
+    // Link
     // Hub has only Router/Hub link connections
     double length_r2h = GlobalParams::r2h_link_length;
     assert(GlobalParams::power_configuration.linkBitLinePowerConfig.find(length_r2h)!=GlobalParams::power_configuration.linkBitLinePowerConfig.end());
@@ -399,7 +399,7 @@ void Power::biasingTx()
 
 }
 
-// Note: In the following 3 functions buffer_pwr_s 
+// Note: In the following 3 functions buffer_pwr_s
 // is assumed as loaded with the proper values from configuration file:
 // - Router: takes the value of input buffers leakage
 // - Hub: takes the leakage value of buffer_from_tile/to_tile
@@ -436,7 +436,7 @@ void Power::leakageLinkRouter2Hub()
 
 void Power::leakageRouter()
 {
-    // note: leakage contributions depending on instance number are 
+    // note: leakage contributions depending on instance number are
     // accounted in specific separate leakage functions
     power_static.breakdown[ROUTING_PWR_S].value +=routing_pwr_s;
     power_static.breakdown[SELECTION_PWR_S].value +=selection_pwr_s;
@@ -533,8 +533,3 @@ void Power::initPowerBreakdown()
     initPowerBreakdownEntry(&power_static.breakdown[TRANSCEIVER_RX_PWR_S],"transceiver_rx_pwr_s");
     initPowerBreakdownEntry(&power_static.breakdown[TRANSCEIVER_TX_PWR_S],"transceiver_tx_pwr_s");
 }
-
-    
-
-
-

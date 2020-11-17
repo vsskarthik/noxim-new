@@ -16,7 +16,7 @@
 mesh_dim_x: 4
 mesh_dim_y: 4
 # number of flits for each router buffer
-buffer_depth: 4
+buffer_depth: 10
 # size of flits, in bits
 flit_size: 32
 # lenght in mm of router to hub connection
@@ -140,15 +140,15 @@ use_wirxsleep: false
 #   VERBOSE_LOW
 #   VERBOSE_MEDIUM
 #   VERBOSE_HIGH
-verbose_mode: VERBOSE_OFF
+verbose_mode: VERBOSE_HIGH
 
 # Trace
 trace_mode: false
 trace_filename: ""
 
-min_packet_size: 8
-max_packet_size: 8
-packet_injection_rate: 0.01
+min_packet_size: 3
+max_packet_size: 3
+packet_injection_rate: 0.1
 probability_of_retransmission: 0.01
 
 # Traffic distribution:

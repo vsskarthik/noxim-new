@@ -62,6 +62,7 @@ Energy:
         routing:
         #   Algorithm:   [Static, Dynamic]
             default:     [1.20e-4, 6.00e-14]
+            CAOE:     [1.20e-4, 6.00e-14]
             XY:          [1.20e-4, 6.00e-14]
             DYAD:        [1.35e-4, 6.75e-14]
             NEGATIVE_FIRST: [1.28e-4, 6.30e-14]
