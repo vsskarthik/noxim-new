@@ -49,7 +49,7 @@ dyad_threshold: 0.6
 #   NOP
 # Each of the above labels should match a corresponding
 # implementation in the selectionStrategies source code directory
-selection_strategy: RANDOM
+selection_strategy: FA
 
 #
 # WIRELESS CONFIGURATION
@@ -148,7 +148,7 @@ trace_filename: ""
 
 min_packet_size: 3
 max_packet_size: 3
-packet_injection_rate: 0.1
+packet_injection_rate: 0.01
 probability_of_retransmission: 0.01
 
 # Traffic distribution:
