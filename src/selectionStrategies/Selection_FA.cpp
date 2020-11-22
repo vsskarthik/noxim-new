@@ -23,16 +23,30 @@ int Selection_FA::apply(Router * router, const vector < int >&directions, const 
         return output;
     }
     else{
-        static int pr_order[4][4] = {{3,2,1,0},{2,3,0,1},{1,0,3,2},{0,1,2,3}};
+        /* 
+        Note: The elements are priority order not directions
+
+        3210 = 0123
+        2301 = 2301
+        1032 = 1023
+        0123 = 3210
+        */
+
+        //static int pr_order[4][4] = {{3,2,1,0},{2,3,0,1},{1,0,3,2},{0,1,2,3}};
+        static int pr_order[4][4] = {{0,1,2,3},{2,3,0,1},{1,0,2,3},{3,2,1,0}};
         int dir1 = directions[0]; 
         int dir2 = directions[1];
         int idx1,idx2,ptr = GlobalParams::fa_ptr;
+        /*
         for(int i=0;i<4;i++){
             if(pr_order[ptr][i] == dir1)
                 idx1=i;
             if(pr_order[ptr][i] == dir2)
                 idx2=i;
         }
+        */
+        idx1 = pr_order[ptr][dir1];
+        idx2 = pr_order[ptr][dir2];
         GlobalParams::fa_ptr++;
         if(ptr>3)
             GlobalParams::fa_ptr=0;
