@@ -29,7 +29,7 @@ vector<int> Routing_CAOE::route(Router * router, const RouteData & routeData)
 			if(ci1<ci2)
 				directions.push_back(temp_dirs[0]);
 			else if(ci1>ci2)
-				directions.push_back(temp_dirs[0]);
+				directions.push_back(temp_dirs[1]);
 			else{
 				directions.push_back(temp_dirs[0]);
 				directions.push_back(temp_dirs[1]);

@@ -36,7 +36,7 @@ n_virtual_channels: 1
 #   TABLE_BASED
 # Each of the above labels should match a corresponding
 # implementation in the routingAlgorithms source code directory
-routing_algorithm: ODD_EVEN
+routing_algorithm: CAOE
 routing_table_filename: ""
 
 # Routing specific parameters
@@ -148,7 +148,7 @@ trace_filename: ""
 
 min_packet_size: 3
 max_packet_size: 3
-packet_injection_rate: 0.01
+packet_injection_rate: 0.1
 probability_of_retransmission: 0.01
 
 # Traffic distribution:
