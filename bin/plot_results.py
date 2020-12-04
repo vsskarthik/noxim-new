@@ -3,7 +3,8 @@ import pandas as pd
 import numpy as np
 import os
 
-file_list = os.listdir('./csv_files')
+dir = 'latency'
+file_list = os.listdir('./csv_files/'+dir)
 file_list.sort()
 for i,j in enumerate(file_list):
     print(f'{i}) {j}')
@@ -20,7 +21,7 @@ rate_list = []
 latency_list = []
 
 for i in files:
-    df = pd.read_csv('./csv_files/'+i,header=None)
+    df = pd.read_csv('./csv_files/'+dir+'/'+i,header=None)
     rates = df.iloc[:,0].values
     latencies = df.iloc[:,1].values
     rate_list.append(rates)
@@ -31,5 +32,19 @@ for x,y in zip(rate_list,latency_list):
     plt.plot(x,y,'-o')
 
 legends = [x[:x.rindex("_")] for x in files]
+legends = [x[:x.rindex("_")] for x in legends]
+legends = [x[:x.rindex("_")] if('BIT' in x) else x for x in legends]
+traffic = files[0]
+traffic = traffic[:traffic.rindex('_')]
+if('BIT' in traffic):
+    idx = traffic[:traffic.rindex('_')].rindex('_')
+    traffic = traffic[idx+1:]
+else:
+    traffic = traffic[traffic.rindex('_')+1:]
+
+
 plt.legend(legends)
+plt.xlabel('Packet Injection Rates(packet/cycle/node)')
+plt.ylabel('Average Packet Latency(cycles)')
+plt.title(traffic)
 plt.show()

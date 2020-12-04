@@ -9,7 +9,7 @@ injection_rates = [0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5]
 #injection_rates = [0.012,0.014,0.016,0.018,0.020,0.022,0.024,0.026,0.028]
 routing_algo = 'ODD_EVEN'
 selection_algo = 'RANDOM'
-traffic_pattern = 'TRANSPOSE1'
+traffic_pattern = 'RANDOM'
 
 def yaml_handler(yaml_file,key,value):
     f = open(yaml_file,'r')
@@ -34,25 +34,33 @@ def parse(filename):
     lines = f.readlines()
     req = lines[-15:]
     delay_line = [i for i in req if "Global average delay" in i]
+    throughput_line = [i for i in req if "Average IP throughput" in i]
     req_line = delay_line[0]
+    req_throughput_line = throughput_line[0]
     delay = req_line.split(':')[1].strip()
-    return float(delay)
+    throughput = req_throughput_line.split(':')[1].strip()
+    return float(delay),float(throughput)
 
 
 if __name__ == '__main__':
     config_file = '../config_examples/test_config.yaml'
-    csv_path = f'csv_files/{routing_algo}_{selection_algo}_{traffic_pattern}_{int(time.time())}.csv'
-    latest_path = f'csv_files/{routing_algo}_{selection_algo}_{traffic_pattern}_latest.csv'
+    csv_path = f'csv_files/latency/{routing_algo}_{selection_algo}_{traffic_pattern}_{int(time.time())}.csv'
+    throughput_csv_path = f'csv_files/throughput/{routing_algo}_{selection_algo}_{traffic_pattern}_{int(time.time())}.csv'
+    latest_path = f'csv_files/latency/{routing_algo}_{selection_algo}_{traffic_pattern}_latest.csv'
     csv_file = open(csv_path,'w')
     latest_file = open(latest_path,'w')
+    throughput_csv_file = open(throughput_csv_path,'w')
     print(f'Routing Algo: {routing_algo} | Selection: {selection_algo} | Traffic: {traffic_pattern}')
     c=1
     for i in injection_rates:
         run_sim(config_file,i,routing_algo,selection_algo,traffic_pattern)
-        latency = parse('./test_results/temp_res')
+        latency,throughput = parse('./test_results/temp_res')
         csv_file.write(f'{i},{latency}\n')
+        throughput_csv_file.write((f'{i},{throughput}\n'))
         latest_file.write(f'{i},{latency}\n')
-        print(f'{c}/{len(injection_rates)} => {i} : {latency}')
+        print(f'{c}/{len(injection_rates)} => {i} : Latency {latency}')
+        print(f'{c}/{len(injection_rates)} => {i} : Throughput {throughput}')
         c+=1
     csv_file.close()
     latest_file.close()
+    throughput_csv_file.close()

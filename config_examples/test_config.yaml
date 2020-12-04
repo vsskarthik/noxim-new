@@ -36,7 +36,7 @@ n_virtual_channels: 1
 #   TABLE_BASED
 # Each of the above labels should match a corresponding
 # implementation in the routingAlgorithms source code directory
-routing_algorithm: CAOE
+routing_algorithm: ODD_EVEN
 routing_table_filename: ""
 
 # Routing specific parameters
@@ -49,7 +49,7 @@ dyad_threshold: 0.6
 #   NOP
 # Each of the above labels should match a corresponding
 # implementation in the selectionStrategies source code directory
-selection_strategy: FA
+selection_strategy: RANDOM
 
 #
 # WIRELESS CONFIGURATION
@@ -160,7 +160,7 @@ probability_of_retransmission: 0.01
 #   TRAFFIC_BIT_REVERSAL
 #   TRAFFIC_SHUFFLE
 #   TRAFFIC_BUTTERFLY
-traffic_distribution: TRAFFIC_TRANSPOSE1
+traffic_distribution: TRAFFIC_HOTSPOT
 # when traffic table based is specified, use the following
 # configuration file
 traffic_table_filename: "t.txt"

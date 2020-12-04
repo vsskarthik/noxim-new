@@ -87,7 +87,7 @@ void loadConfiguration() {
     GlobalParams::detailed = readParam<bool>(config, "detailed");
     GlobalParams::dyad_threshold = readParam<double>(config, "dyad_threshold");
     GlobalParams::max_volume_to_be_drained = readParam<unsigned int>(config, "max_volume_to_be_drained");
-    //GlobalParams::hotspots;
+    GlobalParams::hotspots;
     GlobalParams::show_buffer_stats = readParam<bool>(config, "show_buffer_stats");
     GlobalParams::use_winoc = readParam<bool>(config, "use_winoc");
     GlobalParams::winoc_dst_hops = readParam<int>(config, "winoc_dst_hops",0);
