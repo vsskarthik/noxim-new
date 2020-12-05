@@ -296,6 +296,7 @@ Packet ProcessingElement::trafficRandom()
 	    if (rnd >= range_start && rnd < range_start + GlobalParams::hotspots[i].second) {
 		if (local_id != GlobalParams::hotspots[i].first ) {
 		    p.dst_id = GlobalParams::hotspots[i].first;
+            cout << p.dst_id << " ";
 		}
 		break;
 	    } else

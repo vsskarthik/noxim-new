@@ -1,0 +1,8 @@
+
+        SystemC 2.3.1-Accellera --- Nov  9 2020 13:46:52
+        Copyright (c) 1996-2014 by all Contributors,
+        ALL RIGHTS RESERVED
+Loading configuration from file "../config_examples/test_config.yaml"... Done
+Loading power configurations from file "../bin/power.yaml"... Done
+noxim: ../src/ConfigurationManager.cpp:548: void parseCmdLine(int, char**): Assertion `"Invalid pir format" && false' failed.
+Aborted

@@ -9,7 +9,7 @@
  */
 
 #include "ConfigurationManager.h"
-#include <systemc.h> //Included for the function time() 
+#include <systemc.h> //Included for the function time()
 
 YAML::Node config;
 YAML::Node power_config;
@@ -72,7 +72,7 @@ void loadConfiguration() {
     GlobalParams::min_packet_size = readParam<int>(config, "min_packet_size");
     GlobalParams::max_packet_size = readParam<int>(config, "max_packet_size");
     GlobalParams::routing_algorithm = readParam<string>(config, "routing_algorithm");
-    GlobalParams::routing_table_filename = readParam<string>(config, "routing_table_filename"); 
+    GlobalParams::routing_table_filename = readParam<string>(config, "routing_table_filename");
     GlobalParams::selection_strategy = readParam<string>(config, "selection_strategy");
     GlobalParams::packet_injection_rate = readParam<double>(config, "packet_injection_rate");
     GlobalParams::probability_of_retransmission = readParam<double>(config, "probability_of_retransmission");
@@ -88,20 +88,23 @@ void loadConfiguration() {
     GlobalParams::dyad_threshold = readParam<double>(config, "dyad_threshold");
     GlobalParams::max_volume_to_be_drained = readParam<unsigned int>(config, "max_volume_to_be_drained");
     GlobalParams::hotspots;
+    GlobalParams::hotspots.push_back(make_pair(0,55));
+    GlobalParams::hotspots.push_back(make_pair(2,0.5));
+    GlobalParams::hotspots.push_back(make_pair(8,0.2));
     GlobalParams::show_buffer_stats = readParam<bool>(config, "show_buffer_stats");
     GlobalParams::use_winoc = readParam<bool>(config, "use_winoc");
     GlobalParams::winoc_dst_hops = readParam<int>(config, "winoc_dst_hops",0);
     GlobalParams::use_powermanager = readParam<bool>(config, "use_wirxsleep");
-    
+
 
     set<int> channelSet;
 
     GlobalParams::default_hub_configuration = config["Hubs"]["defaults"].as<HubConfig>();
 
-    for(YAML::const_iterator hubs_it = config["Hubs"].begin(); 
+    for(YAML::const_iterator hubs_it = config["Hubs"].begin();
         hubs_it != config["Hubs"].end();
         ++hubs_it)
-    {   
+    {
         int hub_id = hubs_it->first.as<int>(-1);
         if (hub_id < 0)
             continue;
@@ -121,26 +124,33 @@ void loadConfiguration() {
         GlobalParams::channel_configuration[*it] = default_channel_config_node.as<ChannelConfig>();
     }
 
-    for(YAML::const_iterator channels_it= config["RadioChannels"].begin(); 
+    for(YAML::const_iterator channels_it= config["RadioChannels"].begin();
         channels_it != config["RadioChannels"].end();
         ++channels_it)
-    {    
+    {
         int channel_id = channels_it->first.as<int>(-1);
         if (channel_id < 0)
             continue;
 
         YAML::Node channel_config_node = channels_it->second;
 
-        GlobalParams::channel_configuration[channel_id] = channel_config_node.as<ChannelConfig>(); 
+        GlobalParams::channel_configuration[channel_id] = channel_config_node.as<ChannelConfig>();
     }
 
     GlobalParams::power_configuration = power_config["Energy"].as<PowerConfig>();
+
+    // For Hotspot
+    for(YAML::const_iterator hs_it = config["hotspots"].begin();hs_it != config["hotspots"].end();++hs_it){
+        int node_id = hs_it->first.as<int>(-1);
+        double percentage = hs_it->second.as<double>(-1);
+        GlobalParams::hotspots.push_back(make_pair(node_id,percentage));
+    }
 }
 
 void setBufferToTile(int depth)
 {
     for(YAML::const_iterator hubs_it = config["Hubs"].begin(); hubs_it != config["Hubs"].end(); ++hubs_it)
-    {   
+    {
         int hub_id = hubs_it->first.as<int>(-1);
         if (hub_id < 0)
             continue;
@@ -155,7 +165,7 @@ void setBufferToTile(int depth)
 void setBufferFromTile(int depth)
 {
     for(YAML::const_iterator hubs_it = config["Hubs"].begin(); hubs_it != config["Hubs"].end(); ++hubs_it)
-    {   
+    {
         int hub_id = hubs_it->first.as<int>(-1);
         if (hub_id < 0)
             continue;
@@ -170,7 +180,7 @@ void setBufferFromTile(int depth)
 void setBufferAntenna(int depth)
 {
     for(YAML::const_iterator hubs_it = config["Hubs"].begin(); hubs_it != config["Hubs"].end(); ++hubs_it)
-    {   
+    {
         int hub_id = hubs_it->first.as<int>(-1);
         if (hub_id < 0)
             continue;
@@ -363,6 +373,7 @@ void checkConfiguration()
 	    << endl;
 	exit(1);
     }
+    
 
     for (unsigned int i = 0; i < GlobalParams::hotspots.size(); i++) {
 	if (GlobalParams::topology==TOPOLOGY_MESH){
@@ -429,7 +440,7 @@ void checkConfiguration()
 	cerr << "Error: Buffer level selection strategy can be used only with a single virtual channel" << endl;
 	exit(1);
     }
-    if (GlobalParams::n_virtual_channels>MAX_VIRTUAL_CHANNELS) 
+    if (GlobalParams::n_virtual_channels>MAX_VIRTUAL_CHANNELS)
     {
 	cerr << "Error: cannot use more than " << MAX_VIRTUAL_CHANNELS << " virtual channels." << endl
 	     << "If you need more vc please modify the MAX_VIRTUAL_CHANNELS definition in " << endl
@@ -457,17 +468,17 @@ void parseCmdLine(int arg_num, char *arg_vet[])
 	cout <<
 	    "Running with default parameters (use '-help' option to see how to override them)"
 	    << endl;
-    else 
+    else
     {
-	for (int i = 1; i < arg_num; i++) 
+	for (int i = 1; i < arg_num; i++)
 	{
 	    if (!strcmp(arg_vet[i], "-verbose"))
 		GlobalParams::verbose_mode = atoi(arg_vet[++i]);
-	    else if (!strcmp(arg_vet[i], "-trace")) 
+	    else if (!strcmp(arg_vet[i], "-trace"))
 	    {
 		GlobalParams::trace_mode = true;
 		GlobalParams::trace_filename = arg_vet[++i];
-	    } 
+	    }
 	    else if (!strcmp(arg_vet[i], "-dimx"))
 		GlobalParams::mesh_dim_x = atoi(arg_vet[++i]);
 	    else if (!strcmp(arg_vet[i], "-dimy"))
@@ -488,53 +499,53 @@ void parseCmdLine(int arg_num, char *arg_vet[])
 		GlobalParams::n_virtual_channels = (atoi(arg_vet[++i]));
 	    else if (!strcmp(arg_vet[i], "-flit"))
 		GlobalParams::flit_size = atoi(arg_vet[++i]);
-	    else if (!strcmp(arg_vet[i], "-winoc")) 
+	    else if (!strcmp(arg_vet[i], "-winoc"))
 		GlobalParams::use_winoc = true;
-	    else if (!strcmp(arg_vet[i], "-winoc_dst_hops")) 
+	    else if (!strcmp(arg_vet[i], "-winoc_dst_hops"))
 	    {
             GlobalParams::winoc_dst_hops = atoi(arg_vet[++i]);
 	    }
-	    else if (!strcmp(arg_vet[i], "-wirxsleep")) 
+	    else if (!strcmp(arg_vet[i], "-wirxsleep"))
 	    {
 		GlobalParams::use_powermanager = true;
 	    }
-	    else if (!strcmp(arg_vet[i], "-size")) 
+	    else if (!strcmp(arg_vet[i], "-size"))
 	    {
 		GlobalParams::min_packet_size = atoi(arg_vet[++i]);
 		GlobalParams::max_packet_size = atoi(arg_vet[++i]);
-	    } 
-	    else if (!strcmp(arg_vet[i], "-topology")) 
+	    }
+	    else if (!strcmp(arg_vet[i], "-topology"))
 	    {
 		    GlobalParams::topology = arg_vet[++i];
             cout << "Changing topology to " << GlobalParams::topology << endl;
         }
-	    else if (!strcmp(arg_vet[i], "-routing")) 
+	    else if (!strcmp(arg_vet[i], "-routing"))
 	    {
 		GlobalParams::routing_algorithm = arg_vet[++i];
 		if (GlobalParams::routing_algorithm == ROUTING_DYAD)
 		    GlobalParams::dyad_threshold = atof(arg_vet[++i]);
-		else if (GlobalParams::routing_algorithm == ROUTING_TABLE_BASED) 
+		else if (GlobalParams::routing_algorithm == ROUTING_TABLE_BASED)
 		{
 		    GlobalParams::routing_table_filename = arg_vet[++i];
 		    GlobalParams::packet_injection_rate = 0;
-		} 
-	    } 
+		}
+	    }
 	    else if (!strcmp(arg_vet[i], "-sel")) {
 		GlobalParams::selection_strategy = arg_vet[++i];
-	    } 
-	    else if (!strcmp(arg_vet[i], "-pir")) 
+	    }
+	    else if (!strcmp(arg_vet[i], "-pir"))
 	    {
-		
+
 		GlobalParams::packet_injection_rate = atof(arg_vet[++i]);
 		char *distribution = arg_vet[i+1<arg_num?++i:i];
-		
+
 		if (!strcmp(distribution, "poisson"))
 		    GlobalParams::probability_of_retransmission = GlobalParams::packet_injection_rate;
-		else if (!strcmp(distribution, "burst")) 
+		else if (!strcmp(distribution, "burst"))
 		{
 		    double burstness = atof(arg_vet[++i]);
 		    GlobalParams::probability_of_retransmission = GlobalParams::packet_injection_rate / (1 - burstness);
-		} 
+		}
 		else if (!strcmp(distribution, "pareto")) {
 		    double Aon = atof(arg_vet[++i]);
 		    double Aoff = atof(arg_vet[++i]);
@@ -542,12 +553,12 @@ void parseCmdLine(int arg_num, char *arg_vet[])
 		    GlobalParams::probability_of_retransmission =
 			GlobalParams::packet_injection_rate *
 			pow((1 - r), (1 / Aoff - 1 / Aon));
-		} 
+		}
 		else if (!strcmp(distribution, "custom"))
 		    GlobalParams::probability_of_retransmission = atof(arg_vet[++i]);
 		else assert("Invalid pir format" && false);
-	    } 
-	    else if (!strcmp(arg_vet[i], "-traffic")) 
+	    }
+	    else if (!strcmp(arg_vet[i], "-traffic"))
 	    {
 		char *traffic = arg_vet[++i];
 		if (!strcmp(traffic, "random")) GlobalParams::traffic_distribution = TRAFFIC_RANDOM;
@@ -578,14 +589,14 @@ void parseCmdLine(int arg_num, char *arg_vet[])
 		    GlobalParams::locality=atof(arg_vet[++i]);
 		}
 		else assert(false);
-	    } 
-	    else if (!strcmp(arg_vet[i], "-hs")) 
+	    }
+	    else if (!strcmp(arg_vet[i], "-hs"))
 	    {
 		int node = atoi(arg_vet[++i]);
 		double percentage = atof(arg_vet[++i]);
 		pair < int, double >t(node, percentage);
 		GlobalParams::hotspots.push_back(t);
-	    } 
+	    }
 	    else if (!strcmp(arg_vet[i], "-warmup"))
 		GlobalParams::stats_warm_up_time = atoi(arg_vet[++i]);
 	    else if (!strcmp(arg_vet[i], "-seed"))
@@ -599,11 +610,11 @@ void parseCmdLine(int arg_num, char *arg_vet[])
 		    atoi(arg_vet[++i]);
 	    else if (!strcmp(arg_vet[i], "-sim"))
 		GlobalParams::simulation_time = atoi(arg_vet[++i]);
-	    else if (!strcmp(arg_vet[i], "-asciimonitor")) 
+	    else if (!strcmp(arg_vet[i], "-asciimonitor"))
 		GlobalParams::ascii_monitor = true;
 	    else if (!strcmp(arg_vet[i], "-config") || !strcmp(arg_vet[i], "-power"))
 		// -config is managed from configure function
-		// i++ skips the configuration file name 
+		// i++ skips the configuration file name
 		i++;
 	    else {
 		cerr << "Error: Invalid option: " << arg_vet[i] << endl;
@@ -677,7 +688,7 @@ void configure(int arg_num, char *arg_vet[]) {
 	showConfig();
 }
 
-template <typename T> 
+template <typename T>
 T readParam(YAML::Node node, string param, T default_value) {
    try {
        return node[param].as<T>();
@@ -690,7 +701,7 @@ T readParam(YAML::Node node, string param, T default_value) {
    }
 }
 
-template <typename T> 
+template <typename T>
 T readParam(YAML::Node node, string param) {
    try {
        return node[param].as<T>();
