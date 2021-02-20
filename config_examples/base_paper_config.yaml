@@ -16,7 +16,7 @@
 mesh_dim_x: 4
 mesh_dim_y: 4
 # number of flits for each router buffer
-buffer_depth: 3
+buffer_depth: 10
 # size of flits, in bits
 flit_size: 32
 # lenght in mm of router to hub connection
@@ -36,7 +36,7 @@ n_virtual_channels: 1
 #   TABLE_BASED
 # Each of the above labels should match a corresponding
 # implementation in the routingAlgorithms source code directory
-routing_algorithm: CAOE
+routing_algorithm: ODD_EVEN
 routing_table_filename: ""
 
 # Routing specific parameters
@@ -49,7 +49,7 @@ dyad_threshold: 0.6
 #   NOP
 # Each of the above labels should match a corresponding
 # implementation in the selectionStrategies source code directory
-selection_strategy: FA
+selection_strategy: RANDOM
 
 #
 # WIRELESS CONFIGURATION
@@ -146,8 +146,8 @@ verbose_mode: VERBOSE_HIGH
 trace_mode: false
 trace_filename: ""
 
-min_packet_size: 10
-max_packet_size: 10
+min_packet_size: 3
+max_packet_size: 3
 packet_injection_rate: 0.1
 probability_of_retransmission: 0.01
 
@@ -160,7 +160,7 @@ probability_of_retransmission: 0.01
 #   TRAFFIC_BIT_REVERSAL
 #   TRAFFIC_SHUFFLE
 #   TRAFFIC_BUTTERFLY
-traffic_distribution: TRAFFIC_BIT_REVERSAL
+traffic_distribution: TRAFFIC_RANDOM
 # when traffic table based is specified, use the following
 # configuration file
 traffic_table_filename: "t.txt"
