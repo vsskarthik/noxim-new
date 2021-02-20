@@ -22,7 +22,7 @@ rate_list = []
 latency_list = []
 
 for i in files:
-    df = pd.read_csv('./csv_files/'+dir+'/'+i,header=None)
+    df = pd.read_csv(f'./{csv_folder}/'+dir+'/'+i,header=None)
     rates = df.iloc[:,0].values
     latencies = df.iloc[:,1].values
     rate_list.append(rates)
