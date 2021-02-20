@@ -4,3 +4,4 @@ bin/*
 !bin/my_configs
 !bin/csv_files
 !bin/plot_results.py
+!bin/new_csv_files

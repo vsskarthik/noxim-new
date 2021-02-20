@@ -10,6 +10,7 @@ injection_rates = [0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5]
 routing_algo = 'ODD_EVEN'
 selection_algo = 'RANDOM'
 traffic_pattern = 'RANDOM'
+csv_folder = 'new_csv_files'
 
 def yaml_handler(yaml_file,key,value):
     f = open(yaml_file,'r')
@@ -44,9 +45,9 @@ def parse(filename):
 
 if __name__ == '__main__':
     config_file = '../config_examples/test_config.yaml'
-    csv_path = f'csv_files/latency/{routing_algo}_{selection_algo}_{traffic_pattern}_{int(time.time())}.csv'
-    throughput_csv_path = f'csv_files/throughput/{routing_algo}_{selection_algo}_{traffic_pattern}_{int(time.time())}.csv'
-    latest_path = f'csv_files/latency/{routing_algo}_{selection_algo}_{traffic_pattern}_latest.csv'
+    csv_path = f'{csv_folder}/latency/{routing_algo}_{selection_algo}_{traffic_pattern}_{int(time.time())}.csv'
+    throughput_csv_path = f'{csv_folder}/throughput/{routing_algo}_{selection_algo}_{traffic_pattern}_{int(time.time())}.csv'
+    latest_path = f'{csv_folder}/latency/{routing_algo}_{selection_algo}_{traffic_pattern}_latest.csv'
     csv_file = open(csv_path,'w')
     latest_file = open(latest_path,'w')
     throughput_csv_file = open(throughput_csv_path,'w')

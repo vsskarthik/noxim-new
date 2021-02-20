@@ -4,7 +4,8 @@ import numpy as np
 import os
 
 dir = 'latency'
-file_list = os.listdir('./csv_files/'+dir)
+csv_folder = 'new_csv_files'
+file_list = os.listdir(f'./{csv_folder}/'+dir)
 file_list.sort()
 for i,j in enumerate(file_list):
     print(f'{i}) {j}')
