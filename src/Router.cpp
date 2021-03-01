@@ -619,7 +619,7 @@ int Router::getNeighborId(int _id, int direction) const
 }
 
 int Router::CI(int direction){
-	if (free_slots_neighbor[direction]==NOT_VALID) return NULL;
+	//if (free_slots_neighbor[direction]==NOT_VALID) return NULL;
 	return GlobalParams::buffer_depth - free_slots_neighbor[direction];
 }
 

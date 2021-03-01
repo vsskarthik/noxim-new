@@ -8,10 +8,9 @@ import time
 injection_rates = [0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5]
 #injection_rates = [0.012,0.014,0.016,0.018,0.020,0.022,0.024,0.026,0.028]
 routing_algo = 'CAOE'
-selection_algo = 'RANDOM'
-traffic_pattern = 'RANDOM'
-csv_folder = 'new_csv_files'
+selection_algo = 'FA'
 traffic_pattern = 'TRANSPOSE1'
+csv_folder = 'new_csv_files'
 
 
 def yaml_handler(yaml_file,key,value):

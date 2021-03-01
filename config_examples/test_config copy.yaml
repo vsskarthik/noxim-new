@@ -36,7 +36,7 @@ n_virtual_channels: 1
 #   TABLE_BASED
 # Each of the above labels should match a corresponding
 # implementation in the routingAlgorithms source code directory
-routing_algorithm: temp1
+routing_algorithm: CAXY
 routing_table_filename: ""
 
 # Routing specific parameters

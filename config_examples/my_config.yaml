@@ -13,10 +13,10 @@
 #   BUTTERFLY, BASELINE, and OMEGA are Delta Network topologies
 # topology: MESH
 # X and Y mesh sizes
-mesh_dim_x: 4
-mesh_dim_y: 4
+mesh_dim_x: 8
+mesh_dim_y: 8
 # number of flits for each router buffer
-buffer_depth: 4
+buffer_depth: 10
 # size of flits, in bits
 flit_size: 32
 # lenght in mm of router to hub connection
@@ -36,7 +36,7 @@ n_virtual_channels: 1
 #   TABLE_BASED
 # Each of the above labels should match a corresponding
 # implementation in the routingAlgorithms source code directory
-routing_algorithm: XY
+routing_algorithm: temp1
 routing_table_filename: ""
 
 # Routing specific parameters
@@ -49,7 +49,7 @@ dyad_threshold: 0.6
 #   NOP
 # Each of the above labels should match a corresponding
 # implementation in the selectionStrategies source code directory
-selection_strategy: FA
+selection_strategy: RANDOM
 
 #
 # WIRELESS CONFIGURATION
@@ -148,7 +148,7 @@ trace_filename: ""
 
 min_packet_size: 8
 max_packet_size: 8
-packet_injection_rate: 0.01
+packet_injection_rate: 0.1
 probability_of_retransmission: 0.01
 
 # Traffic distribution:
