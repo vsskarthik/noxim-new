@@ -1,7 +1,7 @@
-bin/*
-!bin/test_results/
-!bin/parser.py
-!bin/my_configs
-!bin/csv_files
-!bin/plot_results.py
-!bin/new_csv_files
+bin/build/
+bin/libs/
+bin/Makefile
+bin/Makefile.deps
+bin/noxim
+
+

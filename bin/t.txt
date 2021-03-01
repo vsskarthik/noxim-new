@@ -1,0 +1,11 @@
+Usage: ./hotspot_ttable dim_x dim_y pairs_prob src dst pir
+
+Where:
+	"dim_x" and "dim_y" are the dimensions of the mesh taken into account;
+	"pairs_prob" is the probability for each pair of nodes from "src" and "dst" regions to communicate;
+	"src" and "dst" are rectangular regions specified by top left corner and bottom right corners;
+	"pir" or packet injection rate, may be a specific value or a range (two values).
+
+Example:
+./hotspot_ttable 8 8 0.5 0 18 52 63 0.001
+./hotspot_ttable 8 8 0.5 0 18 52 63 0.001 0.005
